@@ -37,13 +37,13 @@ jobs:
         find $GITHUB_WORKSPACE -name "*.yml" -print0 | while read -d $'\0' file
         do
           echo $file
-          RESULT=$(influx apply --force true -f $file)
+          RESULT=$(influx apply --force true -f $file | grep Error)
           if [ -z "$RESULT" ]; then
-            echo "SUCCESS: Loaded $file"
+            echo SUCCESS: Loaded $file
             influx stacks rm --stack-id $(influx stacks --json | jq -r '.[].ID')
           else
-            echo "FAIL: Could not load $file"
-            echo "$RESULT"
+            echo FAIL: Could not load $file
+            echo $RESULT
             exit 1
           fi
         done
