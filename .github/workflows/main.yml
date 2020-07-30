@@ -37,6 +37,7 @@ jobs:
         find $GITHUB_WORKSPACE -name "*.yml" -print0 | while read -d $'\0' file
         do
           echo $file
+          cat $file | grep '[[:cntrl:]]'
           RESULT=$(influx apply --force true -f $file | grep Error)
           if [ -z "$RESULT" ]; then
             echo SUCCESS: Loaded $file
