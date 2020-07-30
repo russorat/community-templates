@@ -34,9 +34,9 @@ jobs:
         sleep 5
         influx setup -f -b dummy -o influxdata -u ci_user -p password
         cd $GITHUB_WORKSPACE
-        find $GITHUB_WORKSPACE -name "*.yml" -print0 | while read -d $'\0' file
+        find . -name "*.yml" -print0 | while read -d $'\0' file
         do
-          RESULT=$(influx apply -f $file --force true | grep Error)
+          RESULT=$(influx apply -f "https://raw.githubusercontent.com/russorat/community-templates/master/$file" --force true | grep Error)
           if [ -z "$RESULT" ]; then
             echo "SUCCESS: Loaded $file"
             influx stacks rm --stack-id $(influx stacks --json | jq -r '.[].ID')
