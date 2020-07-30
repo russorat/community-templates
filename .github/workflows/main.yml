@@ -36,9 +36,8 @@ jobs:
         cd $GITHUB_WORKSPACE
         find $GITHUB_WORKSPACE -name "*.yml" -print0 | while read -d $'\0' file
         do
-          CLEAN_FILE="$file.clean"
-          sed -e "s/^M//" $file > $CLEAN_FILE
-          RESULT=$(influx apply -f $CLEAN_FILE --force true | grep Error)
+          cat $file
+          RESULT=$(influx apply -f $file --force true)
           if [ -z "$RESULT" ]; then
             echo "SUCCESS: Loaded $CLEAN_FILE"
             influx stacks rm --stack-id $(influx stacks --json | jq -r '.[].ID')
