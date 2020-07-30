@@ -37,7 +37,7 @@ jobs:
         find $GITHUB_WORKSPACE -name "*.yml" -print0 | while read -d $'\0' file
         do
           echo Trying $file
-          RESULT=$(cat $file | influx apply --force true | grep Error)
+          cat $file | influx apply --force true
           if [ -z "$RESULT" ]; then
             echo SUCCESS: Loaded $file
             influx stacks rm --stack-id $(influx stacks --json | jq -r '.[].ID')
