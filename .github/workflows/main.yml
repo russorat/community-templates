@@ -40,7 +40,7 @@ jobs:
           cat $file | influx apply --force true
           if [ -z "$RESULT" ]; then
             echo SUCCESS: Loaded $file
-            influx stacks rm --stack-id $(influx stacks --json | jq -r '.[].ID')
+            yes | influx stacks rm --stack-id $(influx stacks --json | jq -r '.[].ID')
           else
             echo FAIL: Could not load $file
             echo $RESULT
